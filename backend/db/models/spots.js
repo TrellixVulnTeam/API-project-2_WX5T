@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Spots extends Model {
     /**
@@ -11,39 +9,72 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Spots.belongsTo(models.User, { foreignKey: "ownerId" });
+      Spots.hasMany(models.Booking, { foreignKey: "spotID" });
+      Spots.hasMany(models.Image, { foreignKey: "spotID" });
+      Spots.hasMany(models.Review, { foreignKey: "userID" });
     }
   }
-  Spots.init({
-    ownerId:{
-     type: DataTypes.INTEGER,
+  Spots.init(
+    {
+      ownerId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: { model: "Users" },
+      },
+      address: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      city: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      state: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      country: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      latitude: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+        isDecimal: true,
+      },
+      longitude: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+        isDecimal: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      previewImage: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
+      price: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      ownerId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
-    address:{
-      type: DataTypes.STRING,
-     },
-     city:{
-      type: DataTypes.STRING,
-     },
-     state:{
-      type: DataTypes.STRING,
-     },
-     country:{
-      type: DataTypes.STRING,
-     },
-     latitude:{
-      type: DataTypes.DECIMAL,
-     },
-     longitude:{
-      type: DataTypes.DECIMAL,
-     },
-     name:{
-      type: DataTypes.STRING,
-     },
-     description:{
-      type: DataTypes.STRING,
-     },
-  }, {
-    sequelize,
-    modelName: 'Spots',
-  });
+    {
+      sequelize,
+      modelName: "Spots",
+    }
+  );
   return Spots;
 };

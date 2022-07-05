@@ -15,10 +15,12 @@ module.exports = {
         type: Sequelize.STRING
       },
       spotID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'Spots'}
       },
       reviewID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'Reviews'}
       },
       createdAt: {
         allowNull: false,

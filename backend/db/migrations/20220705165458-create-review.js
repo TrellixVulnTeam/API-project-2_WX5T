@@ -15,10 +15,12 @@ module.exports = {
         type: Sequelize.DECIMAL
       },
       spotID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'Spots'}
       },
       userID: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {model: 'Users'}
       },
       createdAt: {
         allowNull: false,
