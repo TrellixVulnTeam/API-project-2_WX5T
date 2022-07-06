@@ -1,9 +1,9 @@
 const express = require('express')
-const router = express.router()
+const router = express.Router()
 
 const {Spot, Review} = require('../../db/models')
-const spots = require('../../db/models/spots')
-const spots = require('../../db/models/spots')
+// const spots = require('../../db/models/spots')
+
 
 router.get('/', async(req,res)=>{
 const allSpots = await Spot.findAll()
@@ -43,3 +43,4 @@ router.get('/:spotId', async(req,res)=>{
         data.numReviews = numReviews
       }
 })
+module.exports = router

@@ -2,6 +2,7 @@
 const { Model, Validator } = require("sequelize");
 const bcrypt = require("bcryptjs");
 
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     toSafeObject() {
@@ -46,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.hasMany(models.Booking, { foreignKey: "userID" });
       User.hasMany(models.Spots, { foreignKey: "ownerID" });
-      User.hasMany(models.Reviews, { foreignKey: "userId" });
+      User.hasMany(models.Review, { foreignKey: "userId" });
     }
   }
 
