@@ -15,9 +15,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Image.init(
     {
-      imageableType: {
-        type: DataTypes.STRING,
-      },
+      // imageableType: {
+      //   type: DataTypes.STRING,
+      // },
       url: {
         type: DataTypes.STRING,
       },

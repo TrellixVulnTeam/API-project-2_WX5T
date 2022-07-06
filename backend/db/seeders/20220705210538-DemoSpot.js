@@ -1,7 +1,5 @@
 'use strict';
 
-const { DECIMAL } = require("sequelize/types");
-
 module.exports = {
   async up (queryInterface, Sequelize) {
     /**

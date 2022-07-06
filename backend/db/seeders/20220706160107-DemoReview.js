@@ -12,7 +12,7 @@ module.exports = {
      * }], {});
      */
     return queryInterface.bulkInsert(
-      "Review",
+      "Reviews",
       [
         {
           review:
