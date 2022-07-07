@@ -1,14 +1,13 @@
 // backend/routes/api/users.js
-const express = require('express');
+const express = require("express");
 
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { User, Spots } = require('../../db/models');
+const { setTokenCookie, requireAuth } = require("../../utils/auth");
+const { User, Spots, Image, Review } = require("../../db/models");
 
-const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const { check } = require("express-validator");
+const { handleValidationErrors } = require("../../utils/validation");
 
 const router = express.Router();
-
 
 // const validateSignup = [
 //   check('email')
@@ -31,51 +30,55 @@ const router = express.Router();
 // ];
 
 const validateSignup = [
-  check('email')
+  check("email")
     .exists({ checkFalsy: true })
     .isEmail()
-    .withMessage('Invalid email'),
-  check('firstName')
-   .exists({ checkFalsy: true })
-   .withMessage('First Name is required'),
-  check('lastName')
-   .exists({ checkFalsy: true })
-   .withMessage('last Name is required'),
+    .withMessage("Invalid email"),
+  check("firstName")
+    .exists({ checkFalsy: true })
+    .withMessage("First Name is required"),
+  check("lastName")
+    .exists({ checkFalsy: true })
+    .withMessage("last Name is required"),
   // check('password')
   //   .exists({ checkFalsy: true })
   //   .isLength({ min: 6 })
   //   .withMessage('Password must be 6 characters or more.'),
-  handleValidationErrors
+  handleValidationErrors,
 ];
 
-
- // Sign up
- router.post("/sign_up", validateSignup, async (req, res) => {
+// Sign up
+router.post("/sign_up", validateSignup, async (req, res) => {
   const { firstName, lastName, email, password, username } = req.body;
 
   const checkEmail = await User.findOne({
-    where: { email }
-  })
+    where: { email },
+  });
   if (checkEmail) {
     res.status(403);
     res.json({
-      message: "User with that email already exists!"
-    })
+      message: "User with that email already exists!",
+    });
   }
 
-  const user = await User.signup({ firstName, lastName, email, username, password });
+  const user = await User.signup({
+    firstName,
+    lastName,
+    email,
+    username,
+    password,
+  });
 
   if (!firstName) {
     res.status(400).json({
-      message: "First Name is required"
-    })
+      message: "First Name is required",
+    });
   }
   if (!lastName) {
     res.status(400).json({
-      message: "Last Name is required"
-    })
+      message: "Last Name is required",
+    });
   }
-
 
   await setTokenCookie(res, user);
 
@@ -84,16 +87,15 @@ const validateSignup = [
   });
 });
 //GET CURRENT USER
-router.get('/current', requireAuth, async (req, res) => {
-const user = {
-  id: req.user.id,
-  firstName: req.user.firstName,
-  lastName: req.user.lastName,
-  email: req.user.email
-
-}
-  return res.json(user)
-})
+router.get("/current", requireAuth, async (req, res) => {
+  const user = {
+    id: req.user.id,
+    firstName: req.user.firstName,
+    lastName: req.user.lastName,
+    email: req.user.email,
+  };
+  return res.json(user);
+});
 
 //GET CURRENT SPOTS BY CURRENT USER
 
@@ -104,6 +106,40 @@ router.get("/current/spots", requireAuth, async (req, res) => {
     where: { ownerId: id },
   });
   res.json(currSpot);
+});
+
+//GET ALL REVIEWS OF THE CURRENT USERS
+
+router.get("/current/reviews", requireAuth, async (req, res) => {
+  const review = await Review.findAll({
+    where: { id: req.user.id },
+    include: [
+      { model: User, attributes: ["id", "firstName", "lastName"] },
+      {
+        model: Spots,
+        attributes: [
+          "id",
+          "ownerId",
+          "address",
+          "city",
+          "state",
+          "country",
+          "latitude",
+          "longitude",
+          "name",
+          "price",
+        ],
+      },
+      { model: Image, attributes: ["url"] },
+    ],
+  });
+
+  if (!review) {
+    res.status(404);
+    res.json({ message: "Spot does not exist" });
+  }
+
+  res.json(review);
 });
 
 module.exports = router;
