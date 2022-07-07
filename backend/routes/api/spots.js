@@ -177,7 +177,7 @@ router.delete("/:spotID", requireAuth, async (req, res) => {
       statusCode: 404,
     });
   }
-  if(!spot!== req.user){
+  if(spot.ownerId !== req.user.id){
     res.status(401);
     res.json({message:"You must be owner to edit this spot"})
   }
