@@ -13,7 +13,8 @@ module.exports = {
         references: { model: "Users" },
       },
       address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        unique: true
       },
       city: {
         type: Sequelize.STRING
