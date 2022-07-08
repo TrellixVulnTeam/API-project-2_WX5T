@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       spotID: {
         type: DataTypes.INTEGER,
+        // allowNull: false
       },
       userID: {
         type: DataTypes.INTEGER,

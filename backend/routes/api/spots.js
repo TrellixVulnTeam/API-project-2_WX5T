@@ -1,10 +1,11 @@
 const express = require("express");
-const { handleValidationErrors } = require('../../utils/validation');
+const { handleValidationErrors } = require("../../utils/validation");
 const { Sequelize, Model, DataTypes } = require("sequelize");
 // const sequelize = new Sequelize("sqlite::memory:");
 const { requireAuth } = require("../../utils/auth");
+const { Op } = require("sequelize");
 const { check } = require("express-validator");
-const {sequelize} = require("../../db/models")
+const { sequelize } = require("../../db/models");
 const { Spots, Review, User, Image } = require("../../db/models");
 // const spots = require('../../db/models/spots')
 const router = express.Router();
@@ -146,10 +147,10 @@ router.put("/:spotID", requireAuth, validateSpot, async (req, res) => {
       statusCode: 404,
     });
   }
-if(spot.ownerId !== req.user.id){
-  res.status(401);
-  res.json({message:"You must be owner to edit this spot"})
-}
+  if (spot.ownerId !== req.user.id) {
+    res.status(401);
+    res.json({ message: "You must be owner to edit this spot" });
+  }
   spot.address = address;
   spot.city = city;
   spot.state = state;
@@ -160,10 +161,20 @@ if(spot.ownerId !== req.user.id){
   spot.description = description;
   spot.price = price;
 
-  await spot.save({ownerId: id, address, city, state, country, latitude, longitude, name, description, price});
+  await spot.save({
+    ownerId: id,
+    address,
+    city,
+    state,
+    country,
+    latitude,
+    longitude,
+    name,
+    description,
+    price,
+  });
   return res.json(spot);
 });
-
 
 // DELETE A SPOT
 
@@ -177,9 +188,9 @@ router.delete("/:spotID", requireAuth, async (req, res) => {
       statusCode: 404,
     });
   }
-  if(spot.ownerId !== req.user.id){
+  if (spot.ownerId !== req.user.id) {
     res.status(401);
-    res.json({message:"You must be owner to edit this spot"})
+    res.json({ message: "You must be owner to edit this spot" });
   }
   res.json({
     message: "Successfully deleted",
@@ -190,37 +201,54 @@ router.delete("/:spotID", requireAuth, async (req, res) => {
   spot.save();
 });
 
-// router.get('/:spotId', async(req,res)=>{
-//     const individualSpot = await Spots.findByPK(req.param.id, {
-//         include: {model: user, attributes:['id','firstName','lastName']}
-//     })
-//     if (!individualSpot) {
-//         const err = new Error("Property couldn't be found")
-//         err.status = 404
-//         res.json({
-//           message: err.message,
-//           code: err.status
-//         })
-//       } else{
-//         numReviews= await Review.count({
-//             where: {spotID:individualSpot.id}
-//         })
-//         const data = {}
-//         data.individualSpot ={
-//             id: individualSpot.id,
-//             address: individualSpot.address,
-//             city: individualSpot.city,
-//             state: individualSpot.state,
-//             country: individualSpot.country,
-//             latitude: individualSpot.latitude,
-//             longitude: individualSpot.longitude,
-//             name: individualSpot.name,
-//             description: individualSpot.description,
-//             price: individualSpot.price,
-//             createdAt: individualSpot.createdAt,
-//             updatedAt: individualSpot.createdAt
-//         }
-//         data.numReviews = numReviews
-//       }
-// })
+// Create a Review for a Spot based on the Spot's id
+router.post("/:spotID/reviews/", requireAuth, async (req, res) => {
+  const { review, stars } = req.body;
+  const spot = await Spots.findByPk(req.params.spotID);
+  const err = {
+    message: "Validation error",
+    statusCode: 400,
+    errors: {},
+  };
+
+  if (!spot) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+      statusCode: 404,
+    });
+  }
+
+  const existingReview = await Review.findAll({
+    where: {
+      [Op.and]: [{ spotID: req.params.spotID }, { userId: req.user.id }],
+    },
+  });
+
+  if (existingReview.length >= 1) {
+    return res.status(403).json({
+      message: "User already has a review for this property",
+      statusCode: 403,
+    });
+  }
+
+  if (!review) err.errors.review = "Review text is required";
+
+  if (stars < 1) err.errors.star = "Stars must be an integer from 1 to 5";
+
+  if (stars > 5) err.errors.star = "Stars must be an integer from 1 to 5";
+
+  if (!review || !stars) {
+    return res.status(400).json(err);
+  }
+
+  const newReview = await Review.create({
+    userId: req.user.id,
+    propertyId: req.params.propertyId,
+    review,
+    stars,
+  });
+
+  res.json(newReview);
+});
+
 module.exports = router;

@@ -9,12 +9,14 @@ const { Spots, Review, User, Image, Booking } = require("../../db/models");
 // const spots = require('../../db/models/spots')
 const router = express.Router();
 
+
+
 // /Get all reviews by a Spot's id
 router.get("/spots/:spotId/reviews", async (req, res) => {
     const spotId = req.params.spotId;
 
     let spot  = await Spots.findByPk(spotId);
-    //if spot doesnt exist
+    
     if (!spot) {
       return res.status(404).json({
         "message": "Spot couldn't be found!"
@@ -39,5 +41,8 @@ router.get("/spots/:spotId/reviews", async (req, res) => {
       images
     });
   });
+
+
+
 
 module.exports = router;
