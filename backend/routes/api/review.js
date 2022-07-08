@@ -14,10 +14,10 @@ router.get("/spots/:spotId/reviews", async (req, res) => {
     const spotId = req.params.spotId;
 
     let spot  = await Spots.findByPk(spotId);
-
+    //if spot doesnt exist
     if (!spot) {
       return res.status(404).json({
-        "message": "Spot couldn't be found"
+        "message": "Spot couldn't be found!"
       });
     }
 
@@ -40,7 +40,4 @@ router.get("/spots/:spotId/reviews", async (req, res) => {
     });
   });
 
-
-
-  
 module.exports = router;
