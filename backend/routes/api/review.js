@@ -10,39 +10,46 @@ const { Spots, Review, User, Image, Booking } = require("../../db/models");
 const router = express.Router();
 
 
+//EDIT A REVIEW
+router.put('/:reviewId', requireAuth,  async (req, res) => {
+    let reviewId = req.params.reviewId;
+    let reviewParams = req.body;
+    let currUser = req.user.id;
 
-// /Get all reviews by a Spot's id
-router.get("/spots/:spotId/reviews", async (req, res) => {
-    const spotId = req.params.spotId;
+    let review = await Review.findByPk(reviewId);
 
-    let spot  = await Spots.findByPk(spotId);
-    
-    if (!spot) {
+    //checks if reviewId exists
+    if (!review) {
       return res.status(404).json({
-        "message": "Spot couldn't be found!"
+        "message": "Review couldn't be found",
+        "statusCode": 404
       });
     }
 
-    let reviews = await Review.findAll({
-      where: {
-        spotId: spotId,
-      }
-    });
+    // Review must belong to the current user
+    if ( ! currUser) {
+      return res.status(401).json({
+        "message": "Cannot edit review if its not yours",
+        "statusCode": 401
+      });
+    }
 
-    let user = await User.findByPk(spot.ownerId,{
-        atrribute: ["username"]
-    });
-    let images = await Image.findByPk(spot.id)
+    //check body validation for violation errors, then throws appropriate error message
+    try {
+      review = await Review.update(reviewParams, {
+        where: {
+          id: reviewId
+        }
+      });
+      review = await Review.findByPk(reviewId);
+      return res.json(review);
+    } catch(error) {
+      return res.status(400).json({
+        "message": error.message
+      });
+    }
 
-
-    return res.json({
-      reviews,
-      user,
-      images
-    });
   });
-
-
 
 
 module.exports = router;

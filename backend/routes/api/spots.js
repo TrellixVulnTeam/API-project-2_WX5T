@@ -201,9 +201,43 @@ router.delete("/:spotID", requireAuth, async (req, res) => {
   spot.save();
 });
 
+
+//get all reviews by spotid
+router.get('/:spotId/reviews', async (req, res) => {
+  let currentSpotReviews = await Spots.findByPk(req.params.spotId);
+
+  const spotId = req.params.spotId
+
+if (!currentSpotReviews) {
+  return res.status(404).json({
+    "message": "Spot could not be found",
+    "statusCode": 404
+  });
+}
+
+let currentReviews = await Review.findAll({
+  where: {spotId: spotId,},
+    include: [
+        { model: User, attributes: ["id", "firstName", "lastName"] },
+        { model: Image, attributes: ['url'] }
+      ],
+  },
+);
+
+return res.json(currentReviews);
+});
+
+
+
+
+
+
+
+
 // Create a Review for a Spot based on the Spot's id
 router.post("/:spotID/reviews/", requireAuth, async (req, res) => {
   const { review, stars } = req.body;
+  const spotID = req.params.spotID
   const spot = await Spots.findByPk(req.params.spotID);
   const err = {
     message: "Validation error",
@@ -246,6 +280,7 @@ router.post("/:spotID/reviews/", requireAuth, async (req, res) => {
     propertyId: req.params.propertyId,
     review,
     stars,
+    spotID: spotID
   });
 
   res.json(newReview);
