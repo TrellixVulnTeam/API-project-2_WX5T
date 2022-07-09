@@ -2,7 +2,7 @@
 const express = require("express");
 
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
-const { User, Spots, Image, Review } = require("../../db/models");
+const { User, Spots, Image, Review, Booking } = require("../../db/models");
 
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
@@ -140,6 +140,33 @@ router.get("/current/reviews", requireAuth, async (req, res) => {
   }
 
   res.json(review);
+});
+
+//GET ALL OF THE CURRENT USERS BOOKING
+router.get("/current/bookings", requireAuth, async (req, res) => {
+  const { id } = req.user;
+  const bookings = await Booking.findAll({
+    include: [
+      {
+        model: Spots,
+        attributes: [
+          "id",
+          "ownerId",
+          "address",
+          "city",
+          "state",
+          "country",
+          "latitude",
+          "longitude",
+          "name",
+          "price",
+          "previewImage",
+        ],
+      },
+    ],
+    where: { userId: id },
+  });
+  res.json(bookings);
 });
 
 module.exports = router;

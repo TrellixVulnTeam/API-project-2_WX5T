@@ -66,10 +66,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      ownerId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
+      // ownerId: {
+      //   type: DataTypes.INTEGER,
+      //   allowNull: false,
+      // },
     },
     {
       sequelize,
