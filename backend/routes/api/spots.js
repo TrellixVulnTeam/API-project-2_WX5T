@@ -387,13 +387,15 @@ router.post("/:spotID/bookings", requireAuth, async (req, res) => {
   if ("endDate" in err.errors || "startDate" in err.errors) {
     return res.status(403).json(err);
   }
-  const currUser= req.user.id
+  // const currUser= req.params.userID
+  // let userID = currUser
   const newBooking = await Booking.create({
     spotID: req.params.spotID,
-    currUser,
+    userID : req.user.id,
     startDate,
     endDate,
-    userId: req.user.id
+    
+
   });
 
   res.json(newBooking);
