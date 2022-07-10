@@ -425,7 +425,7 @@ Updates and returns an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: PUT
-  * URL: /api/spots/
+  * URL: /api/spots/:spotID
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -513,7 +513,7 @@ Deletes an existing spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /api/spots/:spotid
+  * URL: /api/spots/:spotID
   * Body: none
 
 * Successful Response
