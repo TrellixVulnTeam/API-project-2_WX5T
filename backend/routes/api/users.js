@@ -49,7 +49,7 @@ const validateSignup = [
 
 // Sign up
 router.post("/sign_up", validateSignup, async (req, res) => {
-  const { firstName, lastName, email, password, } = req.body;
+  const { firstName, lastName, email, password,username } = req.body;
 
   const checkEmail = await User.findOne({
     where: { email },
@@ -66,6 +66,7 @@ router.post("/sign_up", validateSignup, async (req, res) => {
     lastName,
     email,
     password,
+    username
   });
 
   if (!firstName) {
@@ -86,6 +87,7 @@ router.post("/sign_up", validateSignup, async (req, res) => {
     lastName,
     email,
     password,
+    username
   });
 });
 //GET CURRENT USER
