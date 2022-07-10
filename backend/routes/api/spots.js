@@ -520,16 +520,16 @@ if (page < 0) {
 if (size < 0) {
   error.errors.size = "Size must be greater than or equal to 0"
 }
-if (+maxLat > 90) {
+if (+maxLatitude > 90) {
   error.errors.maxLatitude = "Maximum latitude is invalid"
 }
-if (+minLat < -90) {
+if (+minLatitude < -90) {
   error.errors.minLatitude = "Minimum latitude is invalid"
 }
-if (+minLng < -180) {
+if (+minLongitude < -180) {
   error.errors.minLongitude = "Maximum longitude is invalid"
 }
-if (+maxLng > 180) {
+if (+maxLongitude > 180) {
   error.errors.maxLongitude = "Minimum longitude is invalid"
 }
 if (Number(minPrice) < 0) {
