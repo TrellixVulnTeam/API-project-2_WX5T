@@ -214,7 +214,7 @@ Returns all the spots.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: /api/spots
+  * URL: /api/spots/all
   * Body: none
 
 * Successful Response
@@ -1143,7 +1143,7 @@ Create and return a new image for a spot specified by id.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: POST
-  * URL: api/spots/:spotsID/image/
+  * URL: api/image/:spotsID/image/
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1190,7 +1190,7 @@ Create and return a new image for a review specified by id.
 * Require proper authorization: Review must belong to the current user
 * Request
   * Method: POST
-  * URL: /api/reviews/:reviewID/image/
+  * URL: /api/image/:reviewID/reviewImage/
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -1288,7 +1288,7 @@ Return spots filtered by query parameters.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: /api/spots/filters
+  * URL: /api/spots/
   * Query Parameters
     * page: integer, minimum: 0, maximum: 10, default: 0
     * size: integer, minimum: 0, maximum: 20, default: 20
