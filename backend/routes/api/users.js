@@ -65,7 +65,6 @@ router.post("/sign_up", validateSignup, async (req, res) => {
     firstName,
     lastName,
     email,
-    // username,
     password,
   });
 
