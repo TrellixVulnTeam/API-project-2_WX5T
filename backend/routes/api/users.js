@@ -155,35 +155,26 @@ router.get("/current/spots", requireAuth, async (req, res) => {
 //GET ALL REVIEWS OF THE CURRENT USERS
 
 router.get("/current/reviews", requireAuth, async (req, res) => {
-  const review = await Review.findAll({
-    where: { id: req.user.id },
+  const {id} = req.user;
+
+  const reviews = await Review.findAll({
     include: [
-      { model: User, attributes: ["id", "firstName", "lastName"] },
       {
         model: Spots,
-        attributes: [
-          "id",
-          "ownerId",
-          "address",
-          "city",
-          "state",
-          "country",
-          "latitude",
-          "longitude",
-          "name",
-          "price",
-        ],
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'previewImage']
+        }
       },
-      { model: Image, attributes: ["url"] },
+      {
+        model: Image,
+        attributes: ['url']
+      }
     ],
-  });
-
-  if (!review) {
-    res.status(404);
-    res.json({ message: "Spot does not exist" });
-  }
-
-  res.json(review);
+    where: {
+      userID: id
+    }
+  })
+  res.json(reviews)
 });
 
 //GET ALL OF THE CURRENT USERS BOOKING
