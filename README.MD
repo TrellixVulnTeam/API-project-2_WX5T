@@ -350,7 +350,7 @@ Creates and returns a new spot.
 * Require Authentication: true
 * Request
   * Method: POST
-  * URL: api/spots/
+  * URL: api/spots/spots
   * Headers:
     * Content-Type: application/json
   * Body:
