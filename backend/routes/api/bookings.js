@@ -9,10 +9,10 @@ const { Spots, Review, User, Image, Booking } = require("../../db/models");
 const spots = require('../../db/models/spots')
 const router = express.Router();
 
-//Create A BOOKING
+//Create A BOOKING from a Spot based on the Spot's id
 
 router.post("/:spotID/bookings", requireAuth, async (req, res) => {
-console.log("KJDVBOSDBVAILNAC")
+
     const spot = await Spots.findByPk(req.params.spotID);
     const { startDate, endDate } = req.body;
   //  let currUser= req.user.id
@@ -112,7 +112,7 @@ router.put("/:bookingID", requireAuth, async (req, res) => {
       });
     }
 
-    const { spotID } = bookingToEdit.toJSON();
+    const { spotID } = editBooking.toJSON();
     const bookings = await Booking.findAll({
       attributes: ["startDate", "endDate"],
       where: {

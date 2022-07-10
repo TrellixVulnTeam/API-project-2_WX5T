@@ -15,6 +15,8 @@ module.exports = {
       "Images",
       [
         {
+          
+
           // imageableType:
           //   'JPEG',
           url: 'https://better.net/chicago/wp-content/uploads/sites/2/2021/04/Parkline-Chicago-.jpg',
@@ -46,7 +48,7 @@ module.exports = {
           // imageableType:
           //   'JPEG',
           url: 'https://media.architecturaldigest.com/photos/570522a05fc159282a6446e5/master/pass/the-bryant-david-chipperfields-first-high-rise-new-york-city-02.jpg',
-          
+
           reviewID: 5
         },
       ],
