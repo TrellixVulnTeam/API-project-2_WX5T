@@ -488,115 +488,82 @@ router.put('/:bookingID', requireAuth, async (req, res, next) => {
 
 })
 
-router.get("/", async (req, res) => {
-  const pagination = {
-    filter: [],
-  };
-  let { page, size, maxLatitude, minLatitude, minLongitude, maxLongitude, minPrice, maxPrice } =
-    req.query;
-  const error = {
-    message: "Validation Error",
-    statusCode: 400,
-    errors: {},
-  };
+router.get('/', async (req,res) => {
 
-  page = Number(page);
-  size = Number(size);
+  let { page, size, maxLatitude, minLatitude, minLongitude, maxLongitude, maxPrice, minPrice} = req.query;
+  page = Number(page)
+  size = Number(size)
 
-  if (Number.isNaN(page)) page = 0;
-  if (Number.isNaN(size)) size = 20;
+if (isNaN(page)) {
+    page = 0
+}
+if (isNaN(size)) {
+    size = 20
+}
 
-  if (page > 10) page = 10;
-  if (size > 20) size = 20;
+if (size > 20) {
+    size = 20
+}
+if (page > 10) {
+    page = 10
+}
+const error = {
+  "message": "Validation Error",
+  "statusCode": 400,
+  "errors": {}
+}
 
-  if (page < 0) error.errors.page = "Page must be greater than or equal to 0";
-  if (size < 0) error.errors.size = "Size must be greater than or equal to 0";
-  if (Number(maxLatitude) > 90) {
-    error.errors.maxLatitude = "Maximum latitude is invalid";
-    maxLat = false;
-  }
-  if (Number(minLatitude) < -90) {
-    error.errors.maxLatitude = "Minimum latitude is invalid";
-    minLng = false;
-  }
-  if (Number(maxLongitude) > 180) {
-    error.errors.maxLongitude = "Maximum longitude is invalid";
-    maxLng = false;
-  }
-  if (Number(minLongitude) < -180) {
-    error.errors.minLongitude = "Minimum longitude is invalid";
-    minLng = false;
-  }
-  if (Number(minPrice) < 0) {
-    error.errors.minPrice = "Maximum price must be greater than 0";
-    minPrice = false;
-  }
-  if (Number(maxPrice) < 0) {
-    error.errors.maxPrice = "Minimum price must be greater than 0";
-    maxPrice = false;
-  }
 
-  if (
-    page < 0 ||
-    size < 0 ||
-    (!maxLatitude && maxLatitude !== undefined) ||
-    (!minLatitude && minLatitude !== undefined) ||
-    (!maxLongitude && maxLongitude !== undefined) ||
-    (!minLongitude && minLongitude !== undefined) ||
-    (!minPrice && minPrice !== undefined) ||
-    (!maxPrice && maxPrice !== undefined)
-  ) {
-    res.status(400);
-    res.json(error);
-  }
+if (page < 0) {
+  error.errors.page = "Page must be greater than or equal to 0"
+}
+if (size < 0) {
+  error.errors.size = "Size must be greater than or equal to 0"
+}
+if (+maxLat > 90) {
+  error.errors.maxLatitude = "Maximum latitude is invalid"
+}
+if (+minLat < -90) {
+  error.errors.minLatitude = "Minimum latitude is invalid"
+}
+if (+minLng < -180) {
+  error.errors.minLongitude = "Maximum longitude is invalid"
+}
+if (+maxLng > 180) {
+  error.errors.maxLongitude = "Minimum longitude is invalid"
+}
+if (Number(minPrice) < 0) {
+  error.errors.minPrice = "Minimum price must be greater than 0"
+}
+if (Number(maxPrice) < 0) {
+  error.errors.maxPrice = "Maximum price must be greater than 0"
+}
 
-  if (maxLatitude) {
-    pagination.filter.push({
-      latitude: { [Op.lte]: Number(maxLatitude) },
-    });
-  }
-  if (minLatitude) {
-    pagination.filter.push({
-      latitude: { [Op.gte]: Number(minLatitude) },
-    });
-  }
-  if (minLongitude) {
-    pagination.filter.push({
-      longitude: { [Op.gte]: Number(minLongitude) },
-    });
-  }
-  if (maxLongitude) {
-    pagination.filter.push({
-      longitude: { [Op.lte]: Number(maxLongitude) },
-    });
-  }
-  if (minPrice) {
-    pagination.filter.push({
-      price: { [Op.gte]: Number(minPrice) },
-    });
-  }
-  if (maxPrice) {
-    pagination.filter.push({
-      price: { [Op.lte]: Number(maxPrice) },
-    });
-  }
+if (page < 0 || size < 0 || +maxLatitude > 90 || +minLongitude < -180 || +maxLongitude > 180 || Number(maxPrice) < 0 || Number(minPrice) < 0) {
+return res.status(400).json(error)
+}
+const options = []
+if (maxLatitude) {options.push({lat: {[Op.lte]: Number(maxLatitude)}})}
+if (minLatitude) {options.push({lat: {[Op.gte]: Number(minLatitude)}})}
+if (maxLongitude) {options.push({lng: {[Op.lte]: Number(maxLongitude)}})}
+if (minLongitude) {options.push({lng: {[Op.gte]: Number(minLongitude)}})}
+if (maxPrice) {options.push({price: {[Op.lte]: Number(maxPrice)}})}
+if (minPrice) {options.push({price: {[Op.gte]: Number(minPrice)}})}
 
-  pagination.size = size;
-  pagination.page = page;
+let spot = await Spots.findAll({
+  where: {
+  [Op.and]: options
 
-  const allSpots = await Spots.findAll({
-    where: {
-      [Op.and]: pagination.filter,
-    },
-    limit: pagination.size,
-    offset: pagination.size * pagination.page,
-  });
-  res.json({
-    allSpots,
-    page: pagination.page,
-    size: pagination.size,
-  });
+},
+    limit: size || 20,
+    offset: page * size,
+});
+return res.json({
+    spot,
+    page,
+    size: size || 20
 });
 
+})
 
 module.exports = router;
