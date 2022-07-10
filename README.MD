@@ -153,7 +153,8 @@ user's information.
       "firstName": "John",
       "lastName": "Smith",
       "email": "john.smith@gmail.com",
-      "password": "secret password"
+      "password": "secret password",
+      "username": "username"
     }
     ```
 
