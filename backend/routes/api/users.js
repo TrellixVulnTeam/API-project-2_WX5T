@@ -171,7 +171,7 @@ router.get("/current/reviews", requireAuth, async (req, res) => {
       }
     ],
     where: {
-      userId: userID
+      userID: id
     }
   })
   res.json(reviews)
