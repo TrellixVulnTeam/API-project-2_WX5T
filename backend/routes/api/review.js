@@ -11,7 +11,7 @@ const router = express.Router();
 
 //EDIT A REVIEW
 router.put('/:reviewID', requireAuth, async (req, res) => {
-  const reviewToUpdate = await Review.findByPk(req.params.reviewID);
+  const reviewToUpdate = await Review.findByPk(req.params.id);
   const {review, stars} = req.body
 
   if (!reviewToUpdate || reviewToUpdate.userID !== req.user.id) {
