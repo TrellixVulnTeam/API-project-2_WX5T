@@ -16,12 +16,12 @@ module.exports = {
       },
       spotID: {
         type: Sequelize.INTEGER,
-        references: {model: 'Spots', key : "id"}
+        references: {model: 'Spots', }
       },
       reviewID: {
         type: Sequelize.INTEGER,
-        references: {model: 'Reviews',key : "id"},
-        onDelete: "CASCADE"
+        references: {model: 'Reviews',},
+      
       },
       createdAt: {
         allowNull: false,
