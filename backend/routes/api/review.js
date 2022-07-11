@@ -56,7 +56,7 @@ router.delete("/:reviewId", requireAuth, async (req, res) => {
     });
   }
 
-  if (review.userID !== id) {
+  if (review.userID !== req.user.id) {
     return res.status(403).json({
       message: "Review couldn't be found",
       statusCode: 404,
