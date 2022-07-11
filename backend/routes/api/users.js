@@ -176,7 +176,7 @@ router.get("/current/reviews", requireAuth, async (req, res) => {
 });
 
 //GET ALL OF THE CURRENT USERS BOOKING
-router.get("/currentUser/bookings", requireAuth, async (req, res) => {
+router.get("/current/bookings", requireAuth, async (req, res) => {
   const userBookings = await Booking.findAll({
     include: [
       {
