@@ -10,43 +10,33 @@ const { Spots, Review, User, Image, Booking } = require("../../db/models");
 const router = express.Router();
 
 //EDIT A REVIEW
-router.put('/:reviewId', requireAuth, async(req, res) => {
-  const { userID, spotID, review, stars } = req.body
-  const reviewEdit = await Review.findByPk(req.params.reviewId);
-  const currentUser = req.user.id
+router.put('/auth/:reviewID', requireAuth, async (req, res) => {
+  const reviewToUpdate = await Review.findByPk(req.params.reviewID);
+  const {review, stars} = req.body
 
-  const err = {
-    message: "Validation error",
-    statusCode: 400,
-    errors: {},
-  };
-
-  if (!reviewEdit) {
-      res.status(404);
-      res.json({
-        message: "Review couldn't be found",
-        statusCode: 404,
-      });
-    }
-
-  if(currentUser !== reviewEdit.userID) {
-      res.status(401)
-      res.json({message: "You must be the owner to delete this review"})
+  if (!reviewToUpdate || reviewToUpdate.userID !== req.user.id) {
+    return res.status(404).json({
+      "message": "Review couldn't be found",
+      "statusCode": 404
+    })
   }
 
-  if (!review) err.errors.review = "Review text is required";
-  if (stars < 1 || stars > 5)
-      err.errors.stars = "Stars must be an integer from 1 to 5";
+
+  const err = {
+    "message": "Validation error",
+    "statusCode": 400,
+    "errors": {}
+  }
+  if (!review) err.errors.review = "Review text is required"
+  if (!stars) err.errors.stars = "Stars must be an integer from 1 to 5"
   if (!review || !stars) {
-      return res.status(400).json(err);
-    }
+    return res.status(400).json(err);
+  }
 
-  reviewEdit.review = review
-  reviewEdit.stars = stars
-
-  await reviewEdit.save({userID, spotID, review, stars});
-
-  return res.json(reviewEdit)
+  reviewToUpdate.review = review
+  reviewToUpdate.stars = stars
+  await reviewToUpdate.save()
+  res.json(reviewToUpdate);
 })
 
 // DELETE A REVIEW
