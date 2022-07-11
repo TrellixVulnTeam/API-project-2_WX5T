@@ -14,7 +14,7 @@ module.exports = {
       stars: {
         type: Sequelize.DECIMAL
       },
-      userId: {
+      userID: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
