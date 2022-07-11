@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.hasMany(models.Booking, { foreignKey: "userID",onDelete: 'CASCADE', hooks: true });
       User.hasMany(models.Spots, { foreignKey: "ownerId",onDelete: 'CASCADE', hooks: true });
-      User.hasMany(models.Review, { foreignKey: "userId",onDelete: 'CASCADE', hooks: true });
+      User.hasMany(models.Review, { foreignKey: "userID",onDelete: 'CASCADE', hooks: true });
     }
   }
 
