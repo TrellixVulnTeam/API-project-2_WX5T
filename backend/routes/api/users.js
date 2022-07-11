@@ -177,7 +177,7 @@ router.get("/current/reviews", requireAuth, async (req, res) => {
 
 //GET ALL OF THE CURRENT USERS BOOKING
 router.get("/current/bookings", requireAuth, async (req, res) => {
-  const { id } = req.user;
+  const { userID } = req.user;
   const bookings = await Booking.findAll({
     include: [
       {
@@ -197,7 +197,7 @@ router.get("/current/bookings", requireAuth, async (req, res) => {
         ],
       },
     ],
-    where: { userId: id },
+    where: { userID: userID },
   });
   res.json(bookings);
 });
