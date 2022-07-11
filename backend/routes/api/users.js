@@ -156,7 +156,7 @@ router.get("/current/spots", requireAuth, async (req, res) => {
 
 router.get("/current/reviews", requireAuth, async (req, res) => {
   const review = await Review.findAll({
-    where: { userID: req.user.id },
+    where: { userId: req.user.id },
       include: [
         { model: User, attributes: ["id", "firstName", "lastName"] },
         { model: Spots, attributes: {
