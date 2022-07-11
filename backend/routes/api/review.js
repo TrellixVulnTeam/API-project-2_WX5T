@@ -10,44 +10,44 @@ const { Spots, Review, User, Image, Booking } = require("../../db/models");
 const router = express.Router();
 
 //EDIT A REVIEW
-router.put("/:reviewId", requireAuth, async (req, res) => {
-  let reviewId = req.params.reviewId;
-  let reviewParams = req.body;
-  let currUser = req.user.id;
+router.put('/:reviewID', requireAuth, async(req, res) => {
+  const { userID, spotID, review, stars } = req.body
+  const reviewEdit = await Review.findByPk(req.params.reviewID);
+  const currentUser = req.user.id
 
-  let review = await Review.findByPk(reviewId);
+  const err = {
+    message: "Validation error",
+    statusCode: 400,
+    errors: {},
+  };
 
-  //checks if reviewId exists
-  if (!review) {
-    return res.status(404).json({
-      message: "Review couldn't be found",
-      statusCode: 404,
-    });
+  if (!reviewEdit) {
+      res.status(404);
+      res.json({
+        message: "Review couldn't be found",
+        statusCode: 404,
+      });
+    }
+
+  if(currentUser !== reviewEdit.userID) {
+      res.status(401)
+      res.json({message: "You must be the owner to delete this review"})
   }
 
-  // Review must belong to the current user
-  if (!currUser) {
-    return res.status(401).json({
-      message: "Cannot edit review if its not yours",
-      statusCode: 401,
-    });
-  }
+  if (!review) err.errors.review = "Review text is required";
+  if (stars < 1 || stars > 5)
+      err.errors.stars = "Stars must be an integer from 1 to 5";
+  if (!review || !stars) {
+      return res.status(400).json(err);
+    }
 
-  //check body validation for violation errors, then throws appropriate error message
-  try {
-    review = await Review.update(reviewParams, {
-      where: {
-        id: reviewId,
-      },
-    });
-    review = await Review.findByPk(reviewId);
-    return res.json(review);
-  } catch (error) {
-    return res.status(400).json({
-      message: error.message,
-    });
-  }
-});
+  reviewEdit.review = review
+  reviewEdit.stars = stars
+
+  await reviewEdit.save({userID, spotID, review, stars});
+
+  return res.json(reviewEdit)
+})
 
 // DELETE A REVIEW
 
