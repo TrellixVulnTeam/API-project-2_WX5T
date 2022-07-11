@@ -14,13 +14,21 @@ module.exports = {
       stars: {
         type: Sequelize.DECIMAL
       },
-      spotID: {
+      userId: {
         type: Sequelize.INTEGER,
-        references: {model: 'Spots'}
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        onDelete: 'cascade'
       },
-      userID: {
+      spotId: {
         type: Sequelize.INTEGER,
-        references: {model: 'Users'}
+        references: {
+          model: 'Spots',
+          key: 'id',
+        },
+        onDelete: 'cascade'
       },
       createdAt: {
         allowNull: false,
