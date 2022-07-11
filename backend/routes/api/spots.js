@@ -210,9 +210,9 @@ router.delete("/:spotID", requireAuth, async (req, res) => {
 
 //get all reviews by spotid
 router.get('/:spotId/reviews', async (req, res) => {
-  let currentSpotReviews = await Spots.findByPk(req.params.spotId);
+  let currentSpotReviews = await Spots.findByPk(req.params.spotID);
 
-  const spotId = req.params.spotId
+  const spotID = req.params.spotID
 
 if (!currentSpotReviews) {
   return res.status(404).json({
@@ -222,7 +222,7 @@ if (!currentSpotReviews) {
 }
 
 let currentReviews = await Review.findAll({
-  where: {spotId: spotId,},
+  where: {spotID: spotID,},
     include: [
         { model: User, attributes: ["id", "firstName", "lastName"] },
         { model: Image, attributes: ['url'] }
