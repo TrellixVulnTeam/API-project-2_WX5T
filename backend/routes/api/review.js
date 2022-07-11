@@ -10,9 +10,9 @@ const { Spots, Review, User, Image, Booking } = require("../../db/models");
 const router = express.Router();
 
 //EDIT A REVIEW
-router.put('/:reviewID', requireAuth, async(req, res) => {
+router.put('/:reviewId', requireAuth, async(req, res) => {
   const { userID, spotID, review, stars } = req.body
-  const reviewEdit = await Review.findByPk(req.params.reviewID);
+  const reviewEdit = await Review.findByPk(req.params.reviewId);
   const currentUser = req.user.id
 
   const err = {
