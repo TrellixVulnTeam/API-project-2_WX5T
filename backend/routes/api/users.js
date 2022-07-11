@@ -176,30 +176,23 @@ router.get("/current/reviews", requireAuth, async (req, res) => {
 });
 
 //GET ALL OF THE CURRENT USERS BOOKING
-router.get("/current/bookings", requireAuth, async (req, res) => {
-  const { userID } = req.user;
-  const bookings = await Booking.findAll({
+router.get("/currentUser/bookings", requireAuth, async (req, res) => {
+  const userBookings = await Booking.findAll({
     include: [
       {
-        model: Spots,
-        attributes: [
-          "id",
-          "ownerId",
-          "address",
-          "city",
-          "state",
-          "country",
-          "latitude",
-          "longitude",
-          "name",
-          "price",
-          "previewImage",
-        ],
+        model: Property,
       },
     ],
-    where: { userID: userID },
+    where: { userID: req.user.id },
   });
-  res.json(bookings);
+
+  if (!userBookings.length) {
+    return res.status(204).json({
+      message: "You currently do not have any bookings.",
+      statusCode: 204,
+    });
+  }
+  res.json(userBookings);
 });
 
 module.exports = router;
