@@ -106,56 +106,56 @@ router.post("/:reviewID/reviewImage", requireAuth, async (req, res) => {
     res.json(newImage);
   });
 
-// //   / Delete an Image
-// router.delete('/:imageID', requireAuth, async (req, res) => {
-//     const image = await Image.findByPk(req.params.imageID, {
-//       include: [
-//         {
-//           model: Review
-//         }
-//       ]
-//     })
-//     if (!image || image?.Review?.userId !== req.user.id) {
-//       return res.status(404).json({
-//         "message": "Image couldn't be found",
-//         "statusCode": 404
-//       })
-//     }
-//     await image.destroy()
-//     res.json({
-//       "message": "Successfully deleted",
-//       "statusCode": 200
-//     })
-//   })
+//   / Delete an Image
+router.delete('/:imageID', requireAuth, async (req, res) => {
+    const image = await Image.findByPk(req.params.imageID, {
+      include: [
+        {
+          model: Review
+        }
+      ]
+    })
+    if (!image || image?.Review?.userId !== req.user.id) {
+      return res.status(404).json({
+        "message": "Image couldn't be found",
+        "statusCode": 404
+      })
+    }
+    await image.destroy()
+    res.json({
+      "message": "Successfully deleted",
+      "statusCode": 200
+    })
+  })
 
   // Delete an Image
-router.delete('/:imageId', requireAuth, async (req, res) => {
-    const image = await Image.findByPk(req.params.Id);
+// router.delete('/:imageId', requireAuth, async (req, res) => {
+//     const image = await Image.findByPk(req.params.Id);
 
-    if (!image) {
-      res.status(404);
-      res.json({
-        message: "Image couldn't be found",
-        statusCode: 404,
-      });
-    }
+//     if (!image) {
+//       res.status(404);
+//       res.json({
+//         message: "Image couldn't be found",
+//         statusCode: 404,
+//       });
+//     }
 
-    if (Image.reviewID || Image.spotID !== req.user.id) {
-      res.status(403);
-      res.json({
-        message: "Image must belong to current user in order to delete",
-        statusCode: 403,
-      });
-    }
+//     if (Image.reviewID || Image.spotID !== req.user.id) {
+//       res.status(403);
+//       res.json({
+//         message: "Image must belong to current user in order to delete",
+//         statusCode: 403,
+//       });
+//     }
 
-    image.destroy();
-    image.save();
+//     image.destroy();
+//     image.save();
 
-    res.json({
-      message: "Successfully deleted",
-      statusCode: 200,
-    });
-  })
+//     res.json({
+//       message: "Successfully deleted",
+//       statusCode: 200,
+//     });
+//   })
 
 
 
