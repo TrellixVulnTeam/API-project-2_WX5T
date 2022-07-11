@@ -180,7 +180,7 @@ router.get("/current/bookings", requireAuth, async (req, res) => {
   const userBookings = await Booking.findAll({
     include: [
       {
-        model: Property,
+        model: Spots,
       },
     ],
     where: { userID: req.user.id },
