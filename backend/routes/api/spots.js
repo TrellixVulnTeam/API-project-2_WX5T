@@ -260,7 +260,7 @@ router.post("/:spotID/reviews/", requireAuth, async (req, res) => {
 
   const existingReview = await Review.findAll({
     where: {
-      [Op.and]: [{ spotID: req.params.spotID }, { userId: req.user.id }],
+      [Op.and]: [{ spotID: req.params.spotID }, { userID: req.user.id }],
     },
   });
 
@@ -282,7 +282,7 @@ router.post("/:spotID/reviews/", requireAuth, async (req, res) => {
   }
 
   const newReview = await Review.create({
-    userId: req.user.id,
+    userID: req.user.id,
     spotID: spotID,
     review,
     stars,
