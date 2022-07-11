@@ -22,13 +22,13 @@ module.exports = {
         },
 
       },
-      spotId: {
+      spotID: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Spots',
 
         },
-        
+
       },
       createdAt: {
         allowNull: false,

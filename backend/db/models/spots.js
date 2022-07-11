@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       Spots.belongsTo(models.User, { foreignKey: "ownerId", as: "Owner",onDelete: 'CASCADE', hooks: true});
       Spots.hasMany(models.Booking, { foreignKey: "spotID",onDelete: 'CASCADE', hooks: true });
       Spots.hasMany(models.Image, { foreignKey: "spotID", as: "images", onDelete: 'CASCADE', hooks: true });
-      Spots.hasMany(models.Review, { foreignKey: "spotId", onDelete: 'CASCADE', hooks: true });
+      Spots.hasMany(models.Review, { foreignKey: "spotID", onDelete: 'CASCADE', hooks: true });
     }
   }
   Spots.init(
