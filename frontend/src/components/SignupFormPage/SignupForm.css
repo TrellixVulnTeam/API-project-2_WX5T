@@ -1,0 +1,39 @@
+.formDiv {
+    height: 100vh;
+    margin: 200px auto 0 auto;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.signUpForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+#sign_up_errors {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.errorLi {
+    list-style-type: none;
+}
+
+.signup_input {
+    height: 40px;
+    border: #D3D3D3 1.5px solid;
+    width: 100%;
+    border-radius: 5px;
+    color: gray;
+}
+
+.signup_input:hover {
+    color: black;
+    border: black 1.5px solid;
+}
