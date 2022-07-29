@@ -5,6 +5,7 @@ import { findASpot } from "../../store/spots";
 import { spotDelete } from "../../store/spots";
 import { deleteReview } from "../../store/review";
 import "./spotDetail.css";
+import SpotReviews from "./spotReviews";
 
 const SpotsDetail = () => {
   const history = useHistory();
@@ -76,6 +77,9 @@ const SpotsDetail = () => {
         <div>
           <button onClick={handleCreateReview}>Create Review</button>
           <button onClick={handleDeleteReview}>Delete Review</button>
+        </div>
+        <div>
+          <SpotReviews spotId={spotId}/>
         </div>
       </>
     )

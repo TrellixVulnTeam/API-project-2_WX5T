@@ -39,7 +39,7 @@ export const createReviews = (spotID, review) => async (dispatch) => {
   // spotID = Number(spotID)
   const response = await csrfFetch(`/api/spots/${spotID}/reviews`, {
     method: "POST",
-    body: JSON.stringify(spotID, review),
+    body: JSON.stringify(review,spotID),
   });
 
   if (response.ok) {
@@ -52,8 +52,8 @@ export const createReviews = (spotID, review) => async (dispatch) => {
 };
 
 //get all reviews of a spot
-export const loadReviews = () => async (dispatch) => {
-  const response = await csrfFetch("/api/spots/:spotID/reviews");
+export const loadReviews = (spotID) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${spotID}/reviews`);
 
   if (response.ok) {
     const allReviews = await response.json();
