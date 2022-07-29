@@ -23,7 +23,7 @@ function LoginForm() {
     const handleDemoLogin = (e) => {
         e.preventDefault();
         setErrors([]);
-        setCredential('demo@demo.com');
+        setCredential('demo@user.io');
         setPassword('password');
         return dispatch(sessionActions.demoLogin()).catch(
             async (res) => {
