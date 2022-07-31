@@ -77,16 +77,16 @@ export const getUserReviews = () => async (dispatch) => {
 };
 
 //delete review
-export const deleteReview = (review) => async (dispatch) => {
-  const response = await csrfFetch(`/api/reviews/${review.id}`, {
+export const deleteReview = (reviewID,) => async (dispatch) => {
+  const response = await csrfFetch(`/api/reviews/${reviewID}`, {
     method: "DELETE",
     body: JSON.stringify({
-      review,
+      reviewID,
     }),
   });
 
   const res = await response.json();
-  dispatch(deleteReviewAction(review));
+  dispatch(deleteReviewAction(reviewID));
   return res;
 };
 

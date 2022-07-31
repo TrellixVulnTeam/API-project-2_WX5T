@@ -13,7 +13,7 @@ const SpotReviews = ({spotId}) => {
 
     return (
       <div className='all-reviews-div'>
-        <h1>Your Reviews</h1>
+        <h1>Reviews</h1>
         {reviews.map((reviewState, i) => {
 
           return (

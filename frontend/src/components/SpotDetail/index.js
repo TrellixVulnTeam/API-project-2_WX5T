@@ -3,7 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { findASpot } from "../../store/spots";
 import { spotDelete } from "../../store/spots";
-import { deleteReview } from "../../store/review";
+// import { deleteReview } from "../../store/review";
 import "./spotDetail.css";
 import SpotReviews from "./spotReviews";
 
@@ -12,8 +12,8 @@ const SpotsDetail = () => {
   const dispatch = useDispatch();
   let { spotId } = useParams();
   spotId = Number(spotId);
-  let { reviewId } = useParams();
-  reviewId = Number(reviewId);
+  // let { reviewId } = useParams();
+  // reviewId = Number(reviewId);
   const spot = useSelector((state) => state.spots[spotId]);
   const sessionUser = useSelector((state) => state.session.user);
   // const review = useSelector((state) => Object.values(state.reviews));
@@ -43,11 +43,11 @@ const SpotsDetail = () => {
     history.push(`/spots/${spotId}/createReview`);
   };
 
-  const handleDeleteReview = (e) => {
-    e.preventDefault();
-    dispatch(deleteReview(reviewId));
-    history.push(`/spots/${spotId}`);
-  };
+  // const handleDeleteReview = (e) => {
+  //   e.preventDefault();
+  //   dispatch(deleteReview(reviewId));
+  //   history.push(`/spots/${spotId}`);
+  // };
 
   return (
     spot && (
@@ -76,7 +76,7 @@ const SpotsDetail = () => {
         </div>
         <div>
           <button onClick={handleCreateReview}>Create Review</button>
-          <button onClick={handleDeleteReview}>Delete Review</button>
+
         </div>
         <div>
           <SpotReviews spotId={spotId}/>
