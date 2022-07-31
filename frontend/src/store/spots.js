@@ -131,35 +131,48 @@ export const spotEdit = (spot,spotID) => async (dispatch) => {
 };
 
 
-//delete a spot
+// delete a spot
+export const spotDelete = (spotID) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${spotID}`, {
+    method: "DELETE",
+    body: JSON.stringify({
+      spotID,
+
+    }),
+  });
+console.log("THIS IS DELETED", response)
+  if (response.ok) {
+    const deletedSpot = await response.json();
+    dispatch(deleteSpot(spotID));
+    return deletedSpot;
+  }
+};
+
+//Delete a Spot// working partially
+// export const spotDelete = (spotID) => async dispatch => {
+//   const response = await csrfFetch(`/api/spots/${spotID}`, {
+//     method: "DELETE",
+//     body: JSON.stringify({spotID})
+//   });
+
+//   if (response.ok) {
+//      await response.json();
+//     dispatch(deleteSpot(spotID));
+//   }
+// };
+
 // export const spotDelete = (spotID) => async (dispatch) => {
 //   const response = await csrfFetch(`/api/spots/${spotID}`, {
 //     method: "DELETE",
 //     body: JSON.stringify({
 //       spotID,
-
 //     }),
 //   });
-// console.log("THIS IS DELETED", response)
-//   if (response.ok) {
-//     const deletedSpot = await response.json();
-//     dispatch(deleteSpot(spotID));
-//     return deletedSpot;
-//   }
+
+//   const res = await response.json();
+//   dispatch(deleteSpot(spotID));
+//   return res;
 // };
-
-export const spotDelete = (spotID) => async dispatch => {
-  const response = await csrfFetch(`/api/spots/${spotID}`, {
-    method: "DELETE",
-    body: JSON.stringify({spotID})
-  });
-
-  if (response.ok) {
-    const deletePayload = await response.json();
-    dispatch(deleteSpot(deletePayload));
-  }
-};
-
 
 //Get the current user's spots
 
@@ -199,7 +212,7 @@ const spotsReducer = (state = initialState, action) => {
 
     case DELETE_SPOT: {
       const newState = { ...state };
-      delete newState[action.res];
+      delete newState[action.spotId]
       return newState;
     }
 

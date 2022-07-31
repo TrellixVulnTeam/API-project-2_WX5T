@@ -211,16 +211,19 @@ router.delete("/:spotID", requireAuth, async (req, res) => {
   } else if (spot.ownerId !== req.user.id) {
     return res
       .status(403)
-      .json({ message: "You must be the owner to edit this spot" });
+      .json({ message: "You must be the owner to delete this spot" });
   }
+
+
+  await spot.destroy();
 
   res.json({
     message: "Successfully deleted",
     statusCode: 200,
   });
 
-  spot.destroy();
-  spot.save();
+
+  // spot.save();
 });
 
 

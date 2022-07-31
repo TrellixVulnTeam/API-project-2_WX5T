@@ -11,6 +11,8 @@ const SpotsDetail = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   let { spotId } = useParams();
+  // let { spotID } = useParams();
+
   spotId = Number(spotId);
   // let { reviewId } = useParams();
   // reviewId = Number(reviewId);
@@ -25,11 +27,12 @@ const SpotsDetail = () => {
     if (!spot) {
       dispatch(findASpot(spotId));
     }
-  }, [dispatch, spotId, spot]);
+  }, [dispatch, spotId,  spot]);
 
   const handleDelete = (e) => {
     e.preventDefault();
     dispatch(spotDelete(spotId));
+    dispatch(findASpot)
     history.push("/");
   };
 
