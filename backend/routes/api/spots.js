@@ -91,6 +91,7 @@ router.get("/:spotID", async (req, res) => {
 //CREATE A SPOT
 
 router.post("/spots", requireAuth, validateSpot, async (req, res) => {
+// const { id } = req.user;
   const {
     ownerId,
     address,
@@ -104,10 +105,10 @@ router.post("/spots", requireAuth, validateSpot, async (req, res) => {
     price,
   } = req.body;
 
-  const { id } = req.user;
+
 
   const newSpot = await Spots.create({
-    ownerId: id,
+    ownerId: req.user.id,
     address,
     city,
     state,
@@ -126,12 +127,12 @@ router.post("/spots", requireAuth, validateSpot, async (req, res) => {
   res.json(201, newSpot);
 });
 
+
+
 //EDIT A SPOT
-
-
 router.put("/:spotID", requireAuth, validateSpot, async (req, res) => {
   let {
-    ownerId,
+    // ownerId,
     address,
     city,
     state,
@@ -141,63 +142,78 @@ router.put("/:spotID", requireAuth, validateSpot, async (req, res) => {
     name,
     description,
     price,
+    previewImage
   } = req.body;
 
-  const { id } = req.user;
+const spot = await Spots.findByPk(req.params.spotID);
 
-  const spot = await Spots.findByPk(req.params.spotID);
-  if (!spot) {
-    res.status(404);
-    res.json({
-      message: "Spot couldn't be found",
-      statusCode: 404,
-    });
-  }
-  if (spot.ownerId !== req.user.id) {
-    res.status(401);
-    res.json({ message: "You must be owner to edit this spot" });
-  }
-  spot.address = address;
-  spot.city = city;
-  spot.state = state;
-  spot.country = country;
-  spot.latitude = latitude;
-  spot.longitude = longitude;
-  spot.name = name;
-  spot.description = description;
-  spot.price = price;
-
-  await spot.save({
-    ownerId: id,
-    address,
-    city,
-    state,
-    country,
-    latitude,
-    longitude,
-    name,
-    description,
-    price,
+if (!spot) {
+  res.status(404);
+  return res.json({
+    message: "Spot couldn't be found",
+    statusCode: 404,
   });
-  return res.json(spot);
+} else if (spot.ownerId !== req.user.id) {
+  return res
+    .status(403)
+    .json({ message: "You must be the owner to edit this spot" });
+}
+
+spot.address = address;
+spot.city = city;
+spot.state = state;
+spot.country = country;
+spot.latitude = latitude;
+spot.longitude = longitude;
+spot.name = name;
+spot.description = description;
+spot.price = price;
+spot.previewImage = previewImage;
+
+await spot.save();
+return res.json(spot);
 });
 
+
 // DELETE A SPOT
+// router.delete("/:spotID", requireAuth, async (req, res) => {
+//   const spot = await Spots.findByPk(req.params.spotID);
+// console.log("THIS IS DELETE", spot)
+//   if (!spot) {
+//     res.status(404);
+//     res.json({
+//       message: "Spot couldn't be found",
+//       statusCode: 404,
+//     });
+//   }
+//   if (spot.ownerId !== req.user.id) {
+//     res.status(401);
+//     res.json({ message: "You must be owner to edit this spot" });
+//   }
+//   res.json({
+//     message: "Successfully deleted",
+//     statusCode: 200,
+//   });
+
+//   spot.destroy();
+//   spot.save();
+// });
 
 router.delete("/:spotID", requireAuth, async (req, res) => {
   const spot = await Spots.findByPk(req.params.spotID);
 
   if (!spot) {
     res.status(404);
-    res.json({
+    return res.json({
       message: "Spot couldn't be found",
       statusCode: 404,
     });
+  } else if (spot.ownerId !== req.user.id) {
+    return res
+      .status(403)
+      .json({ message: "You must be the owner to edit this spot" });
   }
-  if (spot.ownerId !== req.user.id) {
-    res.status(401);
-    res.json({ message: "You must be owner to edit this spot" });
-  }
+
   res.json({
     message: "Successfully deleted",
     statusCode: 200,

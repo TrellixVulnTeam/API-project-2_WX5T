@@ -87,37 +87,79 @@ export const createSpot = spot => async dispatch => {
 }
 
 
-//edit a spot
-export const spotEdit = (spot, spotID) => async (dispatch) => {
-  console.log(spot)
+
+// Edit property
+export const spotEdit = (spot,spotID) => async (dispatch) => {
+  const {
+    id,
+    ownerId,
+    address,
+    city,
+    state,
+    country,
+    latitude,
+    longitude,
+    name,
+    description,
+    price,
+    previewImage,
+  } = spot;
   const response = await csrfFetch(`/api/spots/${spotID}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(spot),
+    body: JSON.stringify({
+      id,
+      ownerId,
+      address,
+      city,
+      state,
+      country,
+      latitude,
+      longitude,
+      name,
+      description,
+      price,
+      previewImage,
+    }),
   });
+
   if (response.ok) {
     const editedSpot = await response.json();
     dispatch(editSpot(editedSpot));
     return editedSpot;
   }
-  return response;
 };
 
 
 //delete a spot
-export const spotDelete = (spotID) => async (dispatch) => {
+// export const spotDelete = (spotID) => async (dispatch) => {
+//   const response = await csrfFetch(`/api/spots/${spotID}`, {
+//     method: "DELETE",
+//     body: JSON.stringify({
+//       spotID,
+
+//     }),
+//   });
+// console.log("THIS IS DELETED", response)
+//   if (response.ok) {
+//     const deletedSpot = await response.json();
+//     dispatch(deleteSpot(spotID));
+//     return deletedSpot;
+//   }
+// };
+
+export const spotDelete = (spotID) => async dispatch => {
   const response = await csrfFetch(`/api/spots/${spotID}`, {
     method: "DELETE",
-    body: JSON.stringify({
-      spotID,
-
-    }),
+    body: JSON.stringify({spotID})
   });
 
-  const res = await response.json();
-  dispatch(deleteSpot(spotID));
-  return res;
+  if (response.ok) {
+    const deletePayload = await response.json();
+    dispatch(deleteSpot(deletePayload));
+  }
 };
+
 
 //Get the current user's spots
 

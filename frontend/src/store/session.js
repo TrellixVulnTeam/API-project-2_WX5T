@@ -60,7 +60,7 @@ export const signup = (user) => async (dispatch) => {
     const response = await csrfFetch('/api/session', {
         method: 'POST',
         body: JSON.stringify({
-            email: 'demo@demo.com',
+            credential: 'demo@user.io',
             password: 'password'
         }),
     });
@@ -89,6 +89,7 @@ const sessionReducer = (state = initialState, action) => {
     case REMOVE_USER:
       newState = Object.assign({}, state);
       newState.user = null;
+      console.log("THIS IS NEWSTATE.USER",newState, newState.user)
       return newState;
     default:
       return state;
