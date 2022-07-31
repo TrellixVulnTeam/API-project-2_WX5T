@@ -1,4 +1,4 @@
-# `<name of application here>`
+# `<CribBNB>`
 
 ## Database Schema Design
 
