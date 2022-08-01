@@ -192,3 +192,22 @@
  #logo > a >img {
     height: 50px;
  }
+
+ #nav_right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    height: 100%;
+    position: relative;
+  }
+  #loginButton {
+    color: black;
+    font-size: 16px;
+    font-weight: 500;
+    margin-right: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
