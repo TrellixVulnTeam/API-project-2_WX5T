@@ -1,1 +1,5 @@
 /* TODO Add site wide styles */
+body {
+    align-items: center;
+    padding: 0 40px;
+}

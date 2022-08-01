@@ -1,13 +1,16 @@
 .detailImg {
-    float: left;
+    display: block;
+    background-size: cover;
+    border-radius: 33px;
+    display: flex;
+    object-fit: cover;
     width: 300px;
     height: 300px;
     background-size: cover;
     border-radius: 33px;
-    margin: 1rem;
     display: flex;
-    position:static;
-
+    position: static;
+    margin-top: 10px;
 }
 
 .detailName {
@@ -15,4 +18,20 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.all-reviews-div {
+/* align-items: center; */
+bottom: 0;
+left: -20;
+}
+
+.detailDescription{
+    padding-top: 10px;
+    width: 90%;
+    border-top: #D3D3D3 solid 1px;
+    letter-spacing: .5px;
+    line-height: 30px;
+    text-align: left;
+    margin-right: 10px;
 }
