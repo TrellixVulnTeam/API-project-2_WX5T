@@ -19,7 +19,7 @@ const SpotReviews = ({spotId}) => {
           return (
             <div className='reviews-container' key={i}>
                <div className='full-user-review'>
-              {/* <p className='userName'>{`${reviewState.firstName} ${reviewState.lastName}`}</p> */}
+              {/* <p className='userName'>{`${reviewState.firstName} ${reviewState.user.lastName}`}</p> */}
             <p className='stars'>{`${reviewState.stars} stars`}</p>
             <p className='review'>{`${reviewState.review}`}</p>
             </div>
@@ -29,6 +29,8 @@ const SpotReviews = ({spotId}) => {
         }
 
       </div>
+
+
     )
 
 

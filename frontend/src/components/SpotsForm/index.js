@@ -15,7 +15,7 @@ const SpotForm = () => {
   const [longitude, setLongitude] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState(1);
   const [errors, setErrors] = useState([]);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
@@ -23,6 +23,23 @@ const SpotForm = () => {
   if (submitSuccess) {
     return <Redirect to="/" />;
   }
+
+  const validations = () => {
+    const errors = [];
+    if (!address) errors.push("Please enter an address");
+    if (!city) errors.push("Please enter a city");
+    if (!state) errors.push("Please enter a state");
+    if (!country) errors.push("Please enter a country");
+    if (!previewImage) errors.push("Please include a preview image");
+    if (name.length < 2)
+      errors.push("Please enter a name with a length greater than 2");
+    if (!description) errors.push("Please include a description");
+    if (!previewImage) errors.push("Please include a preview image!");
+    if (name.length > 25)
+      errors.push("Please include a name with a length that is less than 25");
+    if (previewImage.length > 255) (errors.push("Please include a different image URL that is less than 255 characters"))
+    return errors;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,6 +56,14 @@ const SpotForm = () => {
       description: description,
       price: price,
     };
+
+    const validationErrors = validations();
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors)
+      return;
+    }
+
+
     return dispatch(spotActions.createSpot(data))
       .then(async (res) => {
         setSubmitSuccess(true);
@@ -50,113 +75,127 @@ const SpotForm = () => {
   };
 
   return (
-    <form className='spotForm' onSubmit={handleSubmit}>
-      <ul>
-        {errors.map((error, idx) => (
-          <li key={idx}>{error}</li>
-        ))}
-      </ul>
-      <label>
-        Name
+    <div className="formContainer">
+    <div>
+      <h2 className="createSpotText">Create a Spot</h2>
+    </div>
+    <form className="spotForm" onSubmit={handleSubmit}>
+      {errors ?? (
+        <ul>
+          {errors.map((error, idx) => (
+            <li key={idx}>{error}</li>
+          ))}
+        </ul>
+      )}
+      <div>
+        <label>Name:</label>
         <input
           type="text"
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-
+          required
         />
-      </label>
-      <label>
-        Address
+      </div>
+
+      <div>
+        <label>Address:</label>
         <input
           type="text"
           placeholder="Address"
           value={address}
           onChange={(e) => setAddress(e.target.value)}
-
+          required
         />
-      </label>
-      <label>
-        City
+      </div>
+      <div>
+        <label>City: </label>
         <input
           type="text"
           placeholder="City"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-
+          required
         />
-      </label>
-      <label>
-        State
+      </div>
+      <div>
+        <label>State:</label>
         <input
           type="text"
           placeholder="State"
           value={state}
           onChange={(e) => setState(e.target.value)}
-
+          required
         />
-      </label>
-      <label>
-        Country
+      </div>
+      <div>
+        <label>Country: </label>
         <input
           type="text"
           placeholder="Country"
           value={country}
           onChange={(e) => setCountry(e.target.value)}
-
+          required
         />
-      </label>
-      <label>
-        Latitude
-        <input
-          type="text"
-          placeholder="Latitude"
-          value={latitude}
-          onChange={(e) => setLatitude(e.target.value)}
-
+      </div>
+      <div>
+        <label>Latitude:</label>
+      <input
+        type="text"
+        placeholder="Latitude"
+        value={latitude}
+        onChange={(e) => setLatitude(e.target.value)}
+        required
         />
-      </label>
-      <label>
-        Longitude
-        <input
-          type="text"
-          placeholder="Longitude"
-          value={longitude}
-          onChange={(e) => setLongitude(e.target.value)}
-
+        </div>
+      <div>
+        <label>Longitude</label>
+      <input
+        type="text"
+        placeholder="Longitude"
+        value={longitude}
+        onChange={(e) => setLongitude(e.target.value)}
+        required
         />
-      </label>
-      <label>
-        Description
-        <input
-          type="text"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-
+        </div>
+      <div>
+        <label>Description:</label>
+      <input
+        type="text"
+        placeholder="Description"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        required
         />
-      </label>
-      <label>
-        Price
-        <input
-          type="text"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-
+        </div>
+      <div>
+        <label>Price:</label>
+      <input
+        type="number"
+        min={1}
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+        required
         />
-        </label>
-      <label >
-        Image
+        </div>
+      <div>
+        <label>Image:</label>
         <input
           type="text"
           placeholder="img-url"
           value={previewImage}
           onChange={(e) => setPreviewImage(e.target.value)}
+          required
         />
-      </label>
-      <button type="submit">Create Spot</button>
+      </div>
+      <div className="buttonContainer">
+        <button className="createSpot" type="submit">
+          Create Spot
+        </button>
+      </div>
     </form>
-  );
+  </div>
+);
 };
 
 export default SpotForm;
