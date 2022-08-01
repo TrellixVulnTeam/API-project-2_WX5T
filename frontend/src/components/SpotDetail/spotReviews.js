@@ -17,16 +17,20 @@ const SpotReviews = ({spotId}) => {
         {reviews.map((reviewState, i) => {
 
           return (
-            <div>
-            {/* <p className='name'>{`${reviewState.User.firstName} ${reviewState.User.lastName}`}</p> */}
+            <div className='reviews-container' key={i}>
+               <div className='full-user-review'>
+              {/* <p className='userName'>{`${reviewState.firstName} ${reviewState.user.lastName}`}</p> */}
             <p className='stars'>{`${reviewState.stars} stars`}</p>
             <p className='review'>{`${reviewState.review}`}</p>
+            </div>
             </div>
           )
         })
         }
 
       </div>
+
+
     )
 
 

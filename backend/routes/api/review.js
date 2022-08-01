@@ -9,6 +9,15 @@ const { Spots, Review, User, Image, Booking } = require("../../db/models");
 // const spots = require('../../db/models/spots')
 const router = express.Router();
 
+
+//get all reviews
+router.get("/", async (req, res) => {
+  let reviews = await Review.findAll();
+  return res.json(reviews);
+});
+
+
+
 //EDIT A REVIEW
 router.put('/:reviewID', requireAuth, async (req, res) => {
   const reviewId = req.params.reviewID;

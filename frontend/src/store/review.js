@@ -95,7 +95,7 @@ const reviewsReducer = (state = initialState, action) => {
   switch (action.type) {
     case DELETE_REVIEW: {
       const newState = { ...state };
-      delete newState[action.res];
+      delete newState[action.review];
       return newState;
     };
     case POST_REVIEWS: {

@@ -1,76 +1,57 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUserReviews, deleteReview} from '../../store/review';
-// import { Link } from 'react-router-dom'
-import { useHistory } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory,  } from "react-router-dom";
 
-const Reviews = () => {
-    const dispatch = useDispatch();
-    const reviews = useSelector((state) => Object.values(state.reviews));
-    const history = useHistory()
-    //const spots = useSelector((state) => Object.values(state.spotInRootReducer));
-    // let [obj] = spots
-    //console.log('THIS IS THE REVIEWS AFTER DECON', reviews)
+import {getUserReviews, deleteReview} from "../../store/review"
+import "./userReviews.css";
 
+function UserReviews() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  // const { spotId } = useParams();
+  const [isLoaded, setIsloaded] = useState(false);
+  // const [reviewId, setReviewId] = useState();
+  const reviews = useSelector((state) => {
+    return Object.values(state.reviews);
+  });
+  useEffect(() => {
+    dispatch(getUserReviews()).then(() => setIsloaded(true));
+  }, [dispatch]);
 
-    useEffect(() => {
-        dispatch(getUserReviews());
-    }, [dispatch])
-
-    // const deleteReview = (e) => {
-    //   e.preventDefualt()
-    //   dispatch(deleteReview())
-    // }
-
-
-    const deleteReviews = (reviewID) => async (e) => {
-      e.preventDefault()
-      await dispatch(deleteReview(reviewID))
-      await (dispatch(getUserReviews(reviewID)))
-      history.push('/user/reviews')
+  const handleDeleteClick = (reviewId) => async (e) => {
+    e.preventDefault();
+    const response = await dispatch(deleteReview(reviewId));
+    if (response) {
+      //   dispatch(getUserReviews());
+      history.push(`/spots/currentUser/reviews`);
     }
 
+    // .then (() => history.push(`/spots/currentUser/reviews`))
+    // .then(dispatch(getUserReviews()))
+  };
 
-
-    return (
-    //   <div className='all-reviews-div'>
-    //     <h1>Your Reviews</h1>
-    //     {reviews.map((reviewState, i) => {
-    //       return (
-    //         <div key={reviewState.id}>
-    //         <p className='stars'>{`${reviewState.User.firstName} ${reviewState.User.lastName}`}</p>
-    //         <p className='user'>{`${reviewState.stars} stars`}</p>
-    //         <p className='actual-review'>{`${reviewState.review}`}</p>
-
-    //         </div>
-
-    //       )
-    //     })
-    //     }
-    //   </div>
-    // )
-
-    <div className='all-reviews-div'>
-      <h1>Reviews</h1>
-      {reviews.map((reviewState) => {
-        return (
-          <div key={reviewState.id}>
-          <div className='review-div'>
-          {/* <p className='stars'>{`${reviewState.User.firstName} ${reviewState.User.lastName}`}</p> */}
-          <p className='user'>{`${reviewState.stars} stars`}</p>
-          <p className='actual-review'>{`${reviewState.review}`}</p>
+  return (
+    isLoaded && (
+      <div className="reviewsContainer">
+        <div className="myReviews">
+          <div className="reviewTitle">{reviews?.length > 0 ? "My Reviews" : "No Reviews"}</div>
+          <div className="eachContainer">
+          {reviews?.map((review) => (
+            <div key={review.id} className="eachReview">
+              <div>My Comment: {review.review}</div>
+              <div>Stars: {review.stars}</div>
+              <div>
+                <button className="deleteReview" onClick={handleDeleteClick(review.id)}>
+                  Delete this Review
+                </button>
+              </div>
+            </div>
+          ))}
           </div>
-          <div className="deleteButton">
-            <button onClick={deleteReviews(reviewState.id)}>Delete Review</button>
-          </div>
-          </div>
-        )
-      })
-      }
-    </div>
-  )
+        </div>
+      </div>
+    )
+  );
+}
 
-
-};
-
-export default Reviews;
+export default UserReviews;
